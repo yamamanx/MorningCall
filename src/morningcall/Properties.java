@@ -11,6 +11,7 @@ public class Properties {
 	private String url;
 	private String file_path;
 	private String city;
+	private String app_id;
 	
 	Properties(){
 		ResourceBundle bundle = ResourceBundle.getBundle("MoringCall");
@@ -21,6 +22,7 @@ public class Properties {
 		setUrl(bundle.getString("url"));
 		setFile_path(bundle.getString("file_path"));
 		setCity(bundle.getString("city"));
+		setApp_id(bundle.getString("app_id"));
 	}
 	
 	public String getAccount_sid() {
@@ -64,6 +66,12 @@ public class Properties {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+	public String getApp_id() {
+		return app_id;
+	}
+	public void setApp_id(String app_id) {
+		this.app_id = app_id;
 	}
 	
 	

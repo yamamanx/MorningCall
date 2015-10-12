@@ -13,14 +13,14 @@ public class MainProcess {
 
 		String filePath = properties.getFile_path();
 
-		APIURL apiUrl = new APIURL(properties.getCity(), "weather");
+		APIURL apiUrl = new APIURL(properties.getCity(), "weather",properties.getApp_id());
 		GenerateJsonString generateJsonString = new GenerateJsonString();
 		GenerateXMLFile generateXmlFile = new GenerateXMLFile();
 
 		generateJsonString.setJsonData(apiUrl.getUrlString());
 		generateXmlFile.GenerateWeatherString(generateJsonString.getJsonData());
 
-		apiUrl.setUrlString(properties.getCity(), "forecast");
+		apiUrl.setUrlString(properties.getCity(), "forecast",properties.getApp_id());
 
 		generateJsonString.setJsonData(apiUrl.getUrlString());
 		generateXmlFile
