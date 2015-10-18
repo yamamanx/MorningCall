@@ -1,5 +1,7 @@
 package morningcall;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,6 +9,8 @@ import java.util.Calendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -47,6 +51,11 @@ public class GenerateXMLFile {
 		WeatherJson.main weatherMain = weatherJson.getMain();
 		ConditionCode conditionCode = new ConditionCode();
 		conditionCode.setConditionString(weatherWeather.get(0).getId());
+
+		System.out.println("現在の気温:" + weatherMain.getTemp());
+		System.out.println("現在の天気コード:" + weatherWeather.get(0).getId());
+		System.out.println("現在の天気文字列:" + conditionCode.getConditionString());
+
 		sayString += "現在の気温は" + weatherMain.getTemp() + "度。天気は"
 				+ conditionCode.getConditionString();
 		conditionCode = null;
@@ -67,8 +76,17 @@ public class GenerateXMLFile {
 				ConditionCode conditionCode = new ConditionCode();
 				conditionCode
 						.setConditionString(forecastWeather.get(0).getId());
-				sayString += getJpTimeString(forecastList.getDt_txt()) + "時の気温は" + forecastMain.getTemp()
-						+ "度。天気は" + conditionCode.getConditionString();
+
+				System.out.println(getJpTimeString(forecastList.getDt_txt())
+						+ "時の気温:" + forecastMain.getTemp());
+				System.out.println(getJpTimeString(forecastList.getDt_txt())
+						+ "時の天気コード:" + forecastWeather.get(0).getId());
+				System.out.println(getJpTimeString(forecastList.getDt_txt())
+						+ "時の天気文字列:" + conditionCode.getConditionString());
+
+				sayString += getJpTimeString(forecastList.getDt_txt())
+						+ "時の気温は" + forecastMain.getTemp() + "度。天気は"
+						+ conditionCode.getConditionString();
 				conditionCode = null;
 				break;
 			}
@@ -124,6 +142,8 @@ public class GenerateXMLFile {
 		say.appendChild(XMLDocument.createTextNode(sayString));
 		response.appendChild(say);
 
+		System.out.println("TwimlText:" + documentToString(XMLDocument));
+
 		return XMLDocument;
 	}
 
@@ -145,5 +165,27 @@ public class GenerateXMLFile {
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void printDocument(final Document doc,
+			final Writer writer) {
+		Source source = new DOMSource(doc);
+		Result result = new StreamResult(writer);
+		try {
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.transform(source, result);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String documentToString(final Document doc) {
+		StringWriter sw = new StringWriter();
+		printDocument(doc, sw);
+		return sw.toString();
 	}
 }

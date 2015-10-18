@@ -30,7 +30,7 @@ public class TwilioCall {
 		} catch (TwilioRestException e) {
 			e.printStackTrace();
 		}
-		System.out.println(call.getSid());
+		System.out.println("Twilio Call SID:" + call.getSid());
 	}
 
 }
